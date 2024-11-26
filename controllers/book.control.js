@@ -3,24 +3,36 @@ const mongoose = require("mongoose");
 
 // Add Book (Admin-only)
 const addBook = async (req, res) => {
-  try {
-    const { title, author, genre, availability } = req.body;
-
-    // Validate required fields
-    if (!title || !author || !genre) {
-      return res.status(400).json({ message: "Title, Author, and Genre are required." });
+    try {
+      console.log("Request Body:", req.body);  
+  
+      const { title, author, genre, availability, price } = req.body;
+  
+      // Validate required fields
+      if (!title || !author || !genre) {
+        return res.status(400).json({ message: "Title, Author, and Genre are required." });
+      }
+  
+      
+      const book = new Book({
+        title,
+        author,
+        genre,
+        availability: availability ?? true,  
+        price
+      });
+  
+      // Save the new book to the database
+      await book.save();
+  
+      
+      res.status(201).json({ message: "Book added successfully", book });
+    } catch (err) {
+      console.error("Error adding book:", err);  // Log any errors
+      res.status(500).json({ error: "Internal Server Error" });  // Return a generic error
     }
-
-    const book = new Book({ title, author, genre, availability: availability ?? true });
-    await book.save();
-
-    res.status(201).json({ message: "Book added successfully", book });
-  } catch (err) {
-    console.error("Error adding book:", err);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-};
-
+  };
+  
 // Update Book (Admin-only)
 const updateBook = async (req, res) => {
   try {
@@ -67,7 +79,7 @@ const deleteBook = async (req, res) => {
   }
 };
 
-// Get All Books (with Pagination)
+// Get All Books with Pagination
 const getAllBooks = async (req, res) => {
   try {
     const { page = 1, limit = 10 } = req.query;

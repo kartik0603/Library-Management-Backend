@@ -1,7 +1,9 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db.js");
-
+const transactionRoutes = require("./routes/transaction.route.js");
+const bookRoutes = require("./routes/bookRoutes.js");
+const userRoutes = require("./routes/user.route.js");
 dotenv.config();
 
 const app = express();
@@ -9,9 +11,7 @@ const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
 
-const transactionRoutes = require("./routes/transaction.route.js");
-const bookRoutes = require("./routes/bookRoutes.js");
-const userRoutes = require("./routes/user.route.js");
+
 
 app.use("/api/transactions", transactionRoutes);
 app.use("/api/books", bookRoutes);

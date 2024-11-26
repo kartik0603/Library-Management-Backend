@@ -12,7 +12,7 @@ const {
 const protect = require("../middlewares/autn.middleware.js");
 const roleCheck = require("../middlewares/roleCheck.middleware.js");
 
-// bookRouter.use(protect);
+bookRouter.use(protect);
 
 bookRouter.post("/add", roleCheck("Admin"), addBook);
 bookRouter.put("/update/:id", roleCheck("Admin"), updateBook);
