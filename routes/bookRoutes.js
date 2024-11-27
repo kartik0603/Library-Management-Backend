@@ -15,7 +15,7 @@ const roleCheck = require("../middlewares/roleCheck.middleware.js");
 bookRouter.use(protect);
 
 bookRouter.post("/add", roleCheck("Admin"), addBook);
-bookRouter.put("/update/:id", roleCheck("Admin"), updateBook);
+bookRouter.patch("/update/:id", roleCheck("Admin"), updateBook);
 bookRouter.delete("/delete/:id", roleCheck("Admin"), deleteBook);
 bookRouter.get("/all", getAllBooks);
 bookRouter.get("/search", searchBooks);
