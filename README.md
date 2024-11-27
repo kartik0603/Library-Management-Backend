@@ -113,4 +113,6 @@ The Book module handles operations related to books in the library.
 - **POST `/api/transactions/return`** - Return a borrowed book
  
 
-- **GET `/api/transactions/all`** - View all borrowed books (Admin 
+- **GET `/api/transactions/all`** - View all borrowed books (Admin)
+
+- 
