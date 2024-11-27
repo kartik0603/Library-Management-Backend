@@ -145,41 +145,6 @@ const resetPassword = async (req, res) => {
   }
 };
 
-// Change Password
-const changePassword = async (req, res) => {
-  const { email, currentPassword, newPassword } = req.body;
 
-  if (!email || !currentPassword || !newPassword) {
-    return res.status(400).send({ message: "All fields are required" });
-  }
 
-  try {
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(404).send({ message: "User not found" });
-    }
-
-    const isMatch = await comparePassword(currentPassword, user.password);
-    const isMatched = await bcrypt.compare("password123", "$2b$10$gnzq378sIKyqAwJt6l4oHeZJ7efftMlYedeFmmVnKjXOmS73pGzzK");
-console.log("Does password match:", isMatched); 
-    if (!isMatch) {
-        console.error("Password mismatch:", {
-          providedPassword: currentPassword,
-          storedPassword: user.password,
-          "Password Match": isMatch
-        });
-        return res.status(400).send({ message: "Current password is incorrect" });
-      }
-      
-
-    user.password = await hashPassword(newPassword);
-    await user.save();
-
-    return res.status(200).send({ message: "Password changed successfully" });
-  } catch (error) {
-    console.error("Error changing password:", error);
-    res.status(500).send({ message: "Something went wrong", error: error.message });
-  }
-};
-
-module.exports = { register, login, forgetPassword, resetPassword, changePassword };
+module.exports = { register, login, forgetPassword, resetPassword };
