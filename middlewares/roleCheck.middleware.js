@@ -12,7 +12,7 @@ const roleCheck = (role) => async (req, res, next) => {
     }
 
     // Verify the token and decode it to get user data
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
 
     // Find the user by decoded ID
     const user = await User.findById(decoded.id);

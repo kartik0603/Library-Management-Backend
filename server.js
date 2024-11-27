@@ -17,26 +17,15 @@ app.use("/api/transactions", transactionRoutes);
 app.use("/api/books", bookRoutes);
 app.use("/api/users", userRoutes);
 
-// Global Error
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res
-    .status(err.status || 500)
-    .json({ error: err.message || "Internal Server Error" });
-});
 
-// 404 Error
-app.use((req, res, next) => {
-  res.status(404).json({ error: "Route not found" });
-});
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-
-  connectDB()
-    .then(() => console.log("Database connected successfully"))
-    .catch((err) => {
+app.listen(PORT, async () => {
+    console.log(`Server running on port ${PORT}`);
+    try {
+      await connectDB();
+      console.log("Database connected successfully");
+    } catch (err) {
       console.error("Database connection failed:", err.message);
       process.exit(1);
-    });
-});
+    }
+  });
