@@ -17,6 +17,10 @@ app.use("/api/transactions", transactionRoutes);
 app.use("/api/books", bookRoutes);
 app.use("/api/users", userRoutes);
 
+app.get("/", (req, res) => {
+  res.json({ message: "Hello From Library API" });
+});
+
 
 
 app.listen(PORT, async () => {
