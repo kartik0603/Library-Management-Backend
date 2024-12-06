@@ -2,7 +2,7 @@ const Book = require("../models/book.schema.js");
 const Transaction = require("../models/transaction.schema.js");
 const mongoose = require("mongoose");
 
-// Member: Borrow a book
+
 const borrowBook = async (req, res) => {
   const session = await mongoose.startSession();
   session.startTransaction();
@@ -10,7 +10,7 @@ const borrowBook = async (req, res) => {
   try {
     const { bookId } = req.body;
 
-    // Check if the book exists and is available
+   
     const book = await Book.findById(bookId).session(session);
     if (!book) {
       throw new Error("Book not found");
@@ -20,7 +20,7 @@ const borrowBook = async (req, res) => {
       throw new Error("Book not available for borrowing");
     }
 
-    // Ensure that the user hasn't already borrowed this book
+
     const existingTransaction = await Transaction.findOne({
       userID: req.user.id,
       bookID: bookId,
@@ -30,12 +30,12 @@ const borrowBook = async (req, res) => {
       throw new Error("You have already borrowed this book");
     }
 
-    // Update book availability and borrower info
+    
     book.availability = false;
     book.borrowedBy = req.user.id;
     await book.save({ session });
 
-    // Create the transaction record
+  
     const transaction = new Transaction({
       userID: req.user.id,
       bookID: bookId,
@@ -44,7 +44,7 @@ const borrowBook = async (req, res) => {
     });
     await transaction.save({ session });
 
-    // Commit transaction
+   
     await session.commitTransaction();
     res.json({ message: "Book borrowed successfully", transaction });
   } catch (err) {
@@ -55,7 +55,7 @@ const borrowBook = async (req, res) => {
   }
 };
 
-// Member: Return a book
+
 const returnBook = async (req, res) => {
   const session = await mongoose.startSession();
   session.startTransaction();
@@ -63,7 +63,7 @@ const returnBook = async (req, res) => {
   try {
     const { transactionId } = req.body;
 
-    // Check if the transaction exists and is still active
+    
     const transaction = await Transaction.findById(transactionId).session(session);
     if (!transaction) {
       throw new Error("Transaction not found");
@@ -73,23 +73,23 @@ const returnBook = async (req, res) => {
       throw new Error("Book already returned");
     }
 
-    // Find the corresponding book
+
     const book = await Book.findById(transaction.bookID).session(session);
     if (!book) {
       throw new Error("Book not found");
     }
 
-    // Update the book's availability and borrower info
+   
     book.availability = true;
     book.borrowedBy = null;
     await book.save({ session });
 
-    // Update the transaction status
+  
     transaction.status = "Returned";
     transaction.returnDate = new Date();
     await transaction.save({ session });
 
-    // Commit transaction
+   
     await session.commitTransaction();
     res.json({ message: "Book returned successfully", transaction });
   } catch (err) {
@@ -100,7 +100,7 @@ const returnBook = async (req, res) => {
   }
 };
 
-// Admin/Member: Track all borrowed books
+
 const getAllBorrowedBooks = async (req, res) => {
   try {
     const filter = req.user.role === "Admin" ? {} : { userID: req.user.id };

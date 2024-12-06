@@ -9,7 +9,7 @@ const validateBook = [
   body("availability").isBoolean().withMessage("Availability must be a boolean value"),
   body("price").isNumeric().withMessage("Price must be a numeric value"),
 
-  // Custom validation 
+
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
